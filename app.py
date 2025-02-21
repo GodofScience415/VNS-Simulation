@@ -10,17 +10,20 @@ import tempfile
 import sys
 import subprocess
 
-# Set PyVista to run in off-screen mode
+# Force PyVista to use off-screen rendering
 os.environ["PYVISTA_OFF_SCREEN"] = "true"
+os.environ["PYVISTA_USE_EGL"] = "true"  # Use EGL instead of OpenGL
+os.environ["PYVISTA_VTK_DATA"] = "true"
 
+# Install OpenGL libraries only on Linux (Streamlit Cloud)
 if sys.platform.startswith("linux"):
     try:
         subprocess.run(["apt-get", "update"], check=True)
-        subprocess.run(["apt-get", "install", "-y", "libgl1-mesa-glx", "libgl1-mesa-dev", "libglu1-mesa", "libosmesa6"], check=True)
+        subprocess.run(["apt-get", "install", "-y", "libgl1-mesa-glx", "libgl1-mesa-dev", "libegl1", "libgles2", "libosmesa6"], check=True)
         os.environ["DISPLAY"] = ":99.0"  # Set DISPLAY variable for PyVista
     except Exception as e:
-        print(f"Error installing OpenGL libraries (ignoring non-fatal errors): {e}")
-
+        print(f"Error installing OpenGL libraries: {e}")
+        
 # ================================
 # Streamlit Setup
 # ================================
