@@ -25,7 +25,7 @@ if sys.platform.startswith("linux"):
         os.environ["DISPLAY"] = ":99.0"  # Set DISPLAY variable for PyVista
     except FileNotFoundError:
         print("Xvfb is missing on this system. Skipping Xvfb setup.")
-        
+
 # ================================
 # Streamlit Setup
 # ================================
@@ -236,11 +236,13 @@ st.pyplot(fig)  # Display the combined 2x2 layout in Streamlit
 # ================================
 # SECTION 3: 3D Visualization of VNS Device
 # ================================
+# Ensure PyVista runs in headless mode
+os.environ["PYVISTA_OFF_SCREEN"] = "true"
 
-# Ensure off-screen rendering mode is set
+# Use an off-screen PyVista plotter
 plotter = pv.Plotter(off_screen=True)
 
-# Create a 3D model of the Arduino-based VNS device
+# Create a 3D model of the Arduino-based VNS device as a cube
 arduino = pv.Cube(center=(0, 0, 0), x_length=1.0, y_length=0.5, z_length=0.2)
 plotter.add_mesh(arduino, color='gray', opacity=0.9, label="Arduino VNS Device")
 
@@ -264,10 +266,10 @@ plotter.add_mesh(human_line, color='red', line_width=5)
 
 # Create a temporary file for the screenshot
 temp_dir = tempfile.gettempdir()
-screenshot_path = f"{temp_dir}/vns_3d_visualization.png"
+screenshot_path = os.path.join(temp_dir, "vns_3d_visualization.png")
 
-# Save the visualization as an image instead of rendering directly
+# Generate the screenshot and save
 plotter.screenshot(screenshot_path)
 
-# Display the image in Streamlit
+# Display the saved screenshot in Streamlit
 st.image(screenshot_path, caption="3D Visualization of VNS Device", use_column_width=True)
