@@ -10,5 +10,5 @@ scipy
 pyvistaqt
 vtk
 pyopengl
-osmesa
 xvfbwrapper
+mesa-utils

@@ -6,24 +6,20 @@ import torch.nn as nn
 import torch.optim as optim
 import os
 import pyvista as pv
-import pyvistaqt as pvqt
 import tempfile
 import sys
 import subprocess
 
 # Set PyVista to run in off-screen mode
 os.environ["PYVISTA_OFF_SCREEN"] = "true"
-os.environ["PYVISTA_USE_OSMESA"] = "true"
-os.environ["PYVISTA_VTK_DATA"] = "true"
 
-# Only enable Xvfb on Linux (Streamlit Cloud)
 if sys.platform.startswith("linux"):
     try:
         subprocess.run(["apt-get", "update"], check=True)
-        subprocess.run(["apt-get", "install", "-y", "mesa-utils", "libgl1-mesa-glx", "libosmesa6"], check=True)
+        subprocess.run(["apt-get", "install", "-y", "libgl1-mesa-glx", "libgl1-mesa-dev", "libglu1-mesa", "libosmesa6"], check=True)
         os.environ["DISPLAY"] = ":99.0"  # Set DISPLAY variable for PyVista
-    except FileNotFoundError:
-        print("Xvfb or Mesa is missing on this system. Skipping setup.")
+    except Exception as e:
+        print(f"Error installing OpenGL libraries (ignoring non-fatal errors): {e}")
 
 # ================================
 # Streamlit Setup
