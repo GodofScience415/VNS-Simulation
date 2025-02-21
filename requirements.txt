@@ -11,4 +11,3 @@ pyvistaqt
 vtk
 pyopengl
 xvfbwrapper
-mesa-utils
