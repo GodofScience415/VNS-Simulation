@@ -6,6 +6,8 @@ import torch.nn as nn
 import torch.optim as optim
 import pyvista as pv
 import pyvistaqt as pvqt
+import tempfile
+import os
 
 # ================================
 # Streamlit Setup
@@ -218,31 +220,42 @@ st.pyplot(fig)  # Display the combined 2x2 layout in Streamlit
 # SECTION 3: 3D Visualization of VNS Device
 # ================================
 
-# Use an off-screen PyVista plotter instead of BackgroundPlotter (no Qt needed)
+# Use an off-screen PyVista plotter
 plotter = pv.Plotter(off_screen=True)
+plotter.background_color = "white"  # Set background color for clarity
 
 # Create a 3D model of the Arduino-based VNS device as a cube
 arduino = pv.Cube(center=(0, 0, 0), x_length=1.0, y_length=0.5, z_length=0.2)
-plotter.add_mesh(arduino, color='gray', opacity=0.8, label="Arduino VNS Device")
+plotter.add_mesh(arduino, color='gray', opacity=0.9, label="Arduino VNS Device")
 
 # Create 3D models for each mock patient
 rat_model = pv.Sphere(center=(3, -2, 0.5), radius=0.5)
 chimp_model = pv.Sphere(center=(3, 0, 0.5), radius=0.8)
 human_model = pv.Sphere(center=(3, 2, 0.5), radius=1.0)
-plotter.add_mesh(rat_model, color='tan', opacity=0.8)
-plotter.add_mesh(chimp_model, color='tan', opacity=0.8)
-plotter.add_mesh(human_model, color='tan', opacity=0.8)
+
+plotter.add_mesh(rat_model, color='tan', opacity=0.9)
+plotter.add_mesh(chimp_model, color='tan', opacity=0.9)
+plotter.add_mesh(human_model, color='tan', opacity=0.9)
 
 # Draw lines representing the vagus nerve pathways
 rat_line = pv.Line(pointa=(0.5, 0, 0), pointb=(2.5, -2, 0.5), resolution=50)
 chimp_line = pv.Line(pointa=(0.5, 0, 0), pointb=(2.5, 0, 0.5), resolution=50)
 human_line = pv.Line(pointa=(0.5, 0, 0), pointb=(2.5, 2, 0.5), resolution=50)
+
 plotter.add_mesh(rat_line, color='red', line_width=5)
 plotter.add_mesh(chimp_line, color='red', line_width=5)
 plotter.add_mesh(human_line, color='red', line_width=5)
 
-# Generate screenshot and display in Streamlit
-screenshot = plotter.screenshot()
-st.image(screenshot, caption="3D Visualization of VNS Device", use_column_width=True)
+# Improve lighting for better visualization
+light = pv.Light(position=(5, 5, 5), focal_point=(0, 0, 0), intensity=0.8)
+plotter.add_light(light)
 
-st.success("Streamlit App Completed!")
+# Create a temporary file path for the screenshot
+temp_dir = tempfile.gettempdir()
+screenshot_path = os.path.join(temp_dir, "vns_3d_visualization.png")
+
+# Generate the screenshot
+plotter.screenshot(screenshot_path)
+
+# Display the saved screenshot in Streamlit
+st.image(screenshot_path, caption="3D Visualization of VNS Device", use_column_width=True)
