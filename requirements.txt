@@ -9,3 +9,5 @@ pandas
 scipy
 pyvistaqt
 vtk
+pyopengl
+xvfbwrapper  # Ensures xvfb works properly

@@ -5,12 +5,27 @@ import torch
 import torch.nn as nn
 import torch.optim as optim
 import os
-os.environ["PYVISTA_OFF_SCREEN"] = "true"  # Force off-screen rendering
-os.environ["PYVISTA_USE_EGL"] = "true"  # Use EGL instead of OpenGL
+os.environ["PYVISTA_OFF_SCREEN"] = "true"
+os.environ["PYVISTA_USE_EGL"] = "true"
+os.environ["DISPLAY"] = ":99.0"  # Ensures virtual display is set
+os.environ["PYVISTA_VTK_DATA"] = "true"
 import pyvista as pv
 import pyvistaqt as pvqt
 import tempfile
+import sys
+import subprocess
 
+# Ensure PyVista runs in headless mode
+os.environ["PYVISTA_OFF_SCREEN"] = "true"
+
+# Only run Xvfb on Linux (for Streamlit Cloud), but skip it on Windows
+if sys.platform.startswith("linux"):
+    try:
+        subprocess.run(["Xvfb", ":99", "-screen", "0", "1024x768x24", "-ac"], check=True)
+        os.environ["DISPLAY"] = ":99.0"  # Set DISPLAY variable for PyVista
+    except FileNotFoundError:
+        print("Xvfb is missing on this system. Skipping Xvfb setup.")
+        
 # ================================
 # Streamlit Setup
 # ================================
