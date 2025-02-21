@@ -9,12 +9,18 @@ import pyvista as pv
 import tempfile
 import sys
 import subprocess
+import pyvista as pv
 
 # Ensure PyVista runs in off-screen mode
 os.environ["PYVISTA_OFF_SCREEN"] = "true"
-os.environ["PYVISTA_USE_EGL"] = "true"  # Use EGL instead of OpenGL
+os.environ["PYVISTA_USE_OSMESA"] = "true"  # Use OSMesa for headless rendering
 os.environ["PYVISTA_VTK_DATA"] = "true"
-os.environ["DISPLAY"] = ":99.0"  # Set DISPLAY variable for headless rendering
+
+# Set a fallback DISPLAY variable (needed for some OpenGL alternatives)
+os.environ["DISPLAY"] = ":99.0"
+
+# Disable interactive rendering in Streamlit Cloud
+pv.global_theme.render_window_off_screen = True
 
 # ================================
 # Streamlit Setup
