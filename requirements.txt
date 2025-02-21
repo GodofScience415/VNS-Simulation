@@ -11,3 +11,5 @@ pyvistaqt
 vtk
 pyopengl
 xvfbwrapper
+glfw
+moderngl
