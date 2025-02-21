@@ -8,3 +8,4 @@ pyvista
 pandas
 scipy
 pyvistaqt
+vtk
