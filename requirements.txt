@@ -1,14 +1,2 @@
 streamlit
-matplotlib
-numpy
-torch
-torchvision
-torchaudio
-pyvista
-pandas
-scipy
-pyvistaqt
-vtk
-pyopengl
-osmesa
-xvfbwrapper
+PIL
