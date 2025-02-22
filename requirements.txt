@@ -1,2 +1,5 @@
-streamlit
-PIL
+streamlit>=1.20.0
+Pillow
+matplotlib
+numpy
+torch
