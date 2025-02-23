@@ -6,7 +6,23 @@ st.set_page_config(
     layout="wide"
 )
 
-st.title("VNS Seizure Prevention Simulation")
+st.markdown(
+    """
+    <style>
+    .centered-title {
+        text-align: center;
+        color: #f7fafc;
+        font-size: 3em;
+        font-weight: bold;
+        margin-bottom: 20px;
+    }
+    </style>
+    """,
+    unsafe_allow_html=True
+)
+
+# Use the custom CSS class to center align the title
+st.markdown('<div class="centered-title">VNS Seizure Prevention Simulation</div>', unsafe_allow_html=True)
 
 # Create tabs
 tab1, tab2, tab3 = st.tabs([
